@@ -441,9 +441,11 @@ function multivariatePlot
       % r1: Range matrix for first range. e.g: [min_range1, max_range1]
       % r2: Range matrix for second range. e.g: [min_range2, max_range2]
 
+      numPoints = 100;
+
       % Arrays of 50 points from min -> max
-      xRange = linspace(r1(1), r1(2), 50);
-      yRange = linspace(r2(1), r2(2), 50);
+      xRange = linspace(r1(1), r1(2), numPoints);
+      yRange = linspace(r2(1), r2(2), numPoints);
 
       % Meshgrid of X and Y points
       [X, Y] = meshgrid(xRange, yRange); % This generates the actual grid of x and y values.
