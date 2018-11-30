@@ -504,6 +504,21 @@ function multivariatePlot
       hold off
     end
 
+    % Turn multiplication, division and power to element-wise op
+    function modEqn = elemWiseEqn(eqn)
+      % eqn: Normal equation from user. e.g: x^2 + y^2
+      % output modEqn: Modified eqn for MATLAB. e.g: x.^2 + y.^2
+
+      % For multiplication
+      modEqn = strrep(eqn, '*', '.*');
+
+      % For division
+      modEqn = strrep(modEqn, '/', './');
+
+      % For power
+      modEqn = strrep(modEqn, '^', '.^');
+    end
+
     % Main function
     function main()
       curGraphType = coordTypeCellArray{curGraphTypeIndx};
@@ -516,10 +531,10 @@ function multivariatePlot
       % Control flow of Rectangular plot
       if strcmpi(curGraphType, 'rectangular')
         if strcmpi(eqnInput.String, '')
-          eqnInput.String = 'x.^2 + y.^2';
+          eqnInput.String = 'x^2 + y^2';
         end
 
-        eqn = eqnInput.String;
+        eqn = elemWiseEqn(eqnInput.String);
 
         % Main equation
         F = str2func(strcat('@(x, y)', eqn));
@@ -531,10 +546,10 @@ function multivariatePlot
       % Control flow of Cylindrical plot
       if strcmpi(curGraphType, 'cylindrical')
         if strcmpi(eqnInput.String, '')
-          eqnInput.String = 'sqrt(r.^2 + 1)';
+          eqnInput.String = 'sqrt(r^2 + 1)';
         end
 
-        eqn = eqnInput.String;
+        eqn = elemWiseEqn(eqnInput.String);
 
         F = str2func(strcat('@(r, th)', eqn));
         [X, Y, Z] = points('c', F, r1, r2);
@@ -548,7 +563,7 @@ function multivariatePlot
           eqnInput.String = '5';
         end
 
-        eqn = eqnInput.String;
+        eqn = elemWiseEqn(eqnInput.String);
 
         F = str2func(strcat('@(th, phi)', eqn));
         [X, Y, Z] = points('s', F, r1, r2);
